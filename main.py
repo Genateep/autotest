@@ -1,9 +1,10 @@
 import argparse
 import csv
 import glob
+import os
 import pyautogui as pag
 import subprocess as s
-import os
+
 
 from datetime import datetime
 from pathlib import Path
@@ -31,7 +32,7 @@ def press_key(key: str, interval=0.0, times=0):
         pag.keyDown(key)
         sleep(interval)
         pag.keyUp(key)
-        sleep(1)
+        sleep(0.1)
 
 
 def click(interval=0, times=0):
@@ -56,11 +57,11 @@ def main():
 
     # waiting for game to load by checking background color
     while pag.pixelMatchesColor(300, 300, (0, 0, 0)):
-        sleep(1)
+        sleep(0.5)
+    print(f'Game loaded in {datetime.now() - start_time}')
 
     # skipping intro and starting game
     press_key('enter', times=2)
-    print(f'Game loaded in {datetime.now() - start_time}')
 
     # making start_screenshot
     scr = pag.screenshot()
@@ -69,10 +70,15 @@ def main():
     # start collecting statistics
     press_key('f11')
 
-    # shoot on target and move forward
-    pag.moveRel(-3, 6, 1)
+    # shoot-n-move
+    pag.moveRel(-3, 5, 1)
     click(times=3)
-    press_key('w', interval=10)
+    press_key('w', interval=8)
+    pag.moveRel(-1, 3, 1)
+    click(times=1)
+    press_key('s', interval=1)
+    press_key('d', interval=2)
+    press_key('w', interval=8)
 
     # stop collecting statistics
     press_key('f11')
